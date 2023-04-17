@@ -1,6 +1,8 @@
 package com.kimslog.controller;
 
 import com.kimslog.request.PostCreate;
+import com.kimslog.service.PostService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,22 +16,15 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class PostController {
 
+    private final PostService postService;
+
     @PostMapping ("/post")
-    public Map<String, String> post(@RequestBody @Valid PostCreate params, BindingResult result) {
-        log.info("params={}", params.toString());
-        if(result.hasErrors()){
-            List<FieldError> fieldErrors = result.getFieldErrors();
-            FieldError firstFieldError = fieldErrors.get(0);
-            String fieldName = firstFieldError.getField();
-            String errorMessage =firstFieldError.getDefaultMessage();
-
-            Map<String, String> error = new HashMap<>();
-            error.put(fieldName,errorMessage);
-            return error;
-        }
-
+    public Map<String, String> post(@RequestBody @Valid PostCreate request) {
+        //log.info("params={}", params.toString());
+        postService.write(request);
         return Map.of();
     }
 
