@@ -1,5 +1,6 @@
 package com.kimslog.controller;
 
+import com.kimslog.domain.Post;
 import com.kimslog.request.PostCreate;
 import com.kimslog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping ("/post")
-    public Map<String, String> post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request) {
         //log.info("params={}", params.toString());
         postService.write(request);
-        return Map.of();
     }
 
 }

@@ -1,9 +1,6 @@
 package com.kimslog.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -22,6 +19,7 @@ public class Post {
     @Lob //java 에서는 string, db에서는 longtext
     private String content;
 
+    @Builder
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
