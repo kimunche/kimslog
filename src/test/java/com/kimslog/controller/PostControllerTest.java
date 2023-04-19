@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -136,15 +137,15 @@ class PostControllerTest {
     void getContents() throws Exception {
         //given
         Post post1 = Post.builder()
-                .title("1234567891011")
-                .content("content")
+                .title("title_1")
+                .content("content_1")
                 .build();
 
         postRepository.save(post1);
 
         Post post2 = Post.builder()
-                .title("1234567891011")
-                .content("content")
+                .title("title_2")
+                .content("content_2")
                 .build();
 
         postRepository.save(post2);
@@ -153,6 +154,14 @@ class PostControllerTest {
         mockMvc.perform(get("/posts")
                     .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                //첫번째 object value 검증
+                .andExpect(jsonPath("$[0].id").value(post1.getId()))
+                .andExpect(jsonPath("$[0].title").value("title_1"))
+                .andExpect(jsonPath("$[0].content").value("content_1"))
+                .andExpect(jsonPath("$[1].id").value(post2.getId()))
+                .andExpect(jsonPath("$[1].title").value("title_2"))
+                .andExpect(jsonPath("$[1].content").value("content_2"))
                 .andDo(print());
         //then
     }

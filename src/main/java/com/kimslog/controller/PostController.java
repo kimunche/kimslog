@@ -1,6 +1,5 @@
 package com.kimslog.controller;
 
-import com.kimslog.domain.Post;
 import com.kimslog.request.PostCreate;
 import com.kimslog.response.PostResponse;
 import com.kimslog.service.PostService;
@@ -35,7 +34,7 @@ public class PostController {
 
     //글 여러개 조회
     @GetMapping("/posts")
-    public List<Post> getPostList(){
+    public List<PostResponse> getPostList(){
         return postService.getPostList();
     }
 

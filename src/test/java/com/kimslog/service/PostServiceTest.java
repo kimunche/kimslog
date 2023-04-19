@@ -76,20 +76,19 @@ class PostServiceTest {
     @DisplayName("글 여러개 조회")
     void getContents(){
         //given requestPost엔티티 저장
-        Post requestPost1 = Post.builder()
-                .title("1234567891011")
-                .content("content")
-                .build();
-        postRepository.save(requestPost1);
-
-        Post requestPost2 = Post.builder()
-                .title("1234567891011")
-                .content("content")
-                .build();
-        postRepository.save(requestPost2);
+        postRepository.saveAll(List.of(
+                Post.builder()
+                        .title("1234567891011")
+                        .content("content")
+                        .build(),
+                Post.builder()
+                        .title("1234567891011")
+                        .content("content")
+                        .build()
+        ));
 
         //when 해당 id 로 조회
-        List<Post> posts = postService.getPostList();
+        List<PostResponse> posts = postService.getPostList();
 
         //then null이면 안됨
         assertEquals(2L, posts.size());

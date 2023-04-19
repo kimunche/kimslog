@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -45,7 +46,11 @@ public class PostService {
     }
 
     //글 여러개 조회
-    public List<Post> getPostList(){
-        return postRepository.findAll();
+    public List<PostResponse> getPostList(){
+        return postRepository.findAll().stream()
+                .map(post ->  //넘어온값 postRespose 에 담아줌
+                    new PostResponse(post)
+                )
+                .collect(Collectors.toList());
     }
 }
