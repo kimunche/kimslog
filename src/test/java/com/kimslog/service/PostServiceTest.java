@@ -4,7 +4,6 @@ import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
 import com.kimslog.response.PostResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -68,5 +70,28 @@ class PostServiceTest {
         assertEquals(1L, postRepository.count());
         assertEquals("title", response.getTitle());
         assertEquals("content", response.getContent());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void getContents(){
+        //given requestPost엔티티 저장
+        Post requestPost1 = Post.builder()
+                .title("1234567891011")
+                .content("content")
+                .build();
+        postRepository.save(requestPost1);
+
+        Post requestPost2 = Post.builder()
+                .title("1234567891011")
+                .content("content")
+                .build();
+        postRepository.save(requestPost2);
+
+        //when 해당 id 로 조회
+        List<Post> posts = postService.getPostList();
+
+        //then null이면 안됨
+        assertEquals(2L, posts.size());
     }
 }

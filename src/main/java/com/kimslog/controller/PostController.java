@@ -4,18 +4,12 @@ import com.kimslog.domain.Post;
 import com.kimslog.request.PostCreate;
 import com.kimslog.response.PostResponse;
 import com.kimslog.service.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -35,9 +29,14 @@ public class PostController {
     * */
 
     @GetMapping("/post/{postId}")
-    public PostResponse get(@PathVariable(name="postId") Long id){
-        PostResponse response = postService.get(id);
-        return response;
+    public PostResponse get(@PathVariable Long postId){
+        return postService.get(postId);
+    }
+
+    //글 여러개 조회
+    @GetMapping("/posts")
+    public List<Post> getPostList(){
+        return postService.getPostList();
     }
 
 }

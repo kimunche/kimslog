@@ -4,25 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -127,12 +121,38 @@ class PostControllerTest {
         postRepository.save(post);
 
         //expected
-        mockMvc.perform(get("/post/{postId}", post.getId() )
-                    .contentType(APPLICATION_JSON))
+        mockMvc.perform(get("/post/{postId}", post.getId())
+                .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
                 .andExpect(jsonPath("$.title").value("1234567891"))
                 .andExpect(jsonPath("$.content").value("content"))
+                .andDo(print());
+        //then
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void getContents() throws Exception {
+        //given
+        Post post1 = Post.builder()
+                .title("1234567891011")
+                .content("content")
+                .build();
+
+        postRepository.save(post1);
+
+        Post post2 = Post.builder()
+                .title("1234567891011")
+                .content("content")
+                .build();
+
+        postRepository.save(post2);
+
+        //expected
+        mockMvc.perform(get("/posts")
+                    .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print());
         //then
     }
