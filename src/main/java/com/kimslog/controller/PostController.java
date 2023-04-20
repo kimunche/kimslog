@@ -35,7 +35,7 @@ public class PostController {
     //글 여러개 조회
     @GetMapping("/posts")
     public List<PostResponse> getPostList(){
-        return postService.getPostList();
+        return postService.getPostList(1);
     }
 
 }

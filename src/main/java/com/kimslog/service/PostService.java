@@ -6,6 +6,9 @@ import com.kimslog.request.PostCreate;
 import com.kimslog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,8 +49,9 @@ public class PostService {
     }
 
     //글 여러개 조회
-    public List<PostResponse> getPostList(){
-        return postRepository.findAll().stream()
+    public List<PostResponse> getPostList(int page){
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id")); //한페이지당 넘어올 사이즈,id값으로 내림차순
+        return postRepository.findAll(pageable).stream()
                 .map(post ->  //넘어온값 postRespose 에 담아줌
                     new PostResponse(post)
                 )
