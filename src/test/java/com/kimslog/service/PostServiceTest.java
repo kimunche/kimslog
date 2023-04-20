@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,15 +94,15 @@ class PostServiceTest {
 
         postRepository.saveAll(requestPosts);
 
+        Pageable pageable = PageRequest.of(0,5, Sort.Direction.DESC, "id");
+
         //when 해당 id 로 조회
-        List<PostResponse> posts = postService.getPostList(0);
+        List<PostResponse> posts = postService.getPostList(pageable);
 
         //then null이면 안됨
         assertEquals(5L, posts.size());
         assertEquals("제목 - 30", posts.get(0).getTitle());
         assertEquals("제목 - 26", posts.get(4).getTitle());
-
-
 
     }
 }
