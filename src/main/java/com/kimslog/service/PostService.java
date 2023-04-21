@@ -47,11 +47,21 @@ public class PostService {
     }
 
     //글 여러개 조회
+//    public List<PostResponse> getPostList(Pageable pageable){
+//        //Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id")); //한페이지당 넘어올 사이즈,id값으로 내림차순
+//        return postRepository.findAll(pageable).stream()
+//                .map(post ->  //넘어온값 postRespose 에 담아줌
+//                    new PostResponse(post)
+//                )
+//                .collect(Collectors.toList());
+//    }
+
+    //글 여러개 조회 - queryDsl 적용
     public List<PostResponse> getPostList(Pageable pageable){
         //Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id")); //한페이지당 넘어올 사이즈,id값으로 내림차순
-        return postRepository.findAll(pageable).stream()
+        return postRepository.getPostList(1).stream()
                 .map(post ->  //넘어온값 postRespose 에 담아줌
-                    new PostResponse(post)
+                        new PostResponse(post)
                 )
                 .collect(Collectors.toList());
     }
