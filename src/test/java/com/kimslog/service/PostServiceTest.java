@@ -3,6 +3,7 @@ package com.kimslog.service;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,9 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,10 +92,15 @@ class PostServiceTest {
 
         postRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0,5, Sort.Direction.DESC, "id");
+        //Pageable pageable = PageRequest.of(0,5, Sort.Direction.DESC, "id");
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
+                .size(10)
+                .build();
+
 
         //when 해당 id 로 조회
-        List<PostResponse> posts = postService.getPostList(pageable);
+        List<PostResponse> posts = postService.getPostList(postSearch);
 
         //then null이면 안됨
         assertEquals(10L, posts.size());

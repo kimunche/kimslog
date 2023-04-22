@@ -2,6 +2,7 @@ package com.kimslog.repository;
 
 import com.kimslog.domain.Post;
 import com.kimslog.domain.QPost;
+import com.kimslog.request.PostSearch;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -13,10 +14,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Post> getPostList(int page) {
+    public List<Post> getPostList(PostSearch postSearch) {
         return jpaQueryFactory.selectFrom(QPost.post)
-                .limit(10)
-                .offset((long)(page-1)*10)
+                .limit(postSearch.getSize())
+                .offset(postSearch.getOffset())
                 .orderBy(QPost.post.id.desc())
                 .fetch();
     }

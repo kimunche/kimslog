@@ -3,10 +3,10 @@ package com.kimslog.service;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,9 +57,9 @@ public class PostService {
 //    }
 
     //글 여러개 조회 - queryDsl 적용
-    public List<PostResponse> getPostList(Pageable pageable){
+    public List<PostResponse> getPostList(PostSearch postSearch){
         //Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id")); //한페이지당 넘어올 사이즈,id값으로 내림차순
-        return postRepository.getPostList(1).stream()
+        return postRepository.getPostList(postSearch).stream()
                 .map(post ->  //넘어온값 postRespose 에 담아줌
                         new PostResponse(post)
                 )

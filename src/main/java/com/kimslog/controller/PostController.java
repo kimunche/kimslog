@@ -1,11 +1,11 @@
 package com.kimslog.controller;
 
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
 import com.kimslog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,8 +35,8 @@ public class PostController {
 
     //글 여러개 조회
     @GetMapping("/posts")
-    public List<PostResponse> getPostList(Pageable pageable){
-        return postService.getPostList(pageable);
+    public List<PostResponse> getPostList(@ModelAttribute PostSearch postSearch){
+        return postService.getPostList(postSearch);
     }
 
 }
