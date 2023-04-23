@@ -1,6 +1,7 @@
 package com.kimslog.service;
 
 import com.kimslog.domain.Post;
+import com.kimslog.domain.PostEditor;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
 import com.kimslog.request.PostEdit;
@@ -73,8 +74,16 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 글입니다."));
 
-        post.change(postEdit.getTitle(), postEdit.getContent());
+        //post.change(postEdit.getTitle(), postEdit.getContent());
 
-        //postRepository.save(post);
+        //postRepository.save(post); //transactional 어노체이션 사용
+
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        PostEditor postEditor = editorBuilder.title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        post.edit(postEditor);
     }
 }
