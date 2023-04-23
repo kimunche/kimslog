@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostEdit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -184,6 +184,31 @@ class PostControllerTest {
 //                .andExpect(jsonPath("$[0].id").value(30))
                 .andExpect(jsonPath("$[0].title").value("제목 - 19"))
                 .andExpect(jsonPath("$[0].content").value("테스트 - 19"))
+                .andDo(print());
+        //then
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void editTitle() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("원래제목")
+                .content("원래 글 내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정한제목")
+                .content("원래 글 내용")
+                .build();
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(postEdit))
+                )
+                .andExpect(status().isOk())
                 .andDo(print());
         //then
     }

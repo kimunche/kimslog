@@ -1,6 +1,7 @@
 package com.kimslog.controller;
 
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostEdit;
 import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
 import com.kimslog.service.PostService;
@@ -40,6 +41,11 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getPostList(@ModelAttribute PostSearch postSearch){
         return postService.getPostList(postSearch);
+    }
+
+    @PatchMapping ("/posts/{postId}")
+    public void editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request){
+        postService.editPost(postId, request);
     }
 
 }
