@@ -3,11 +3,13 @@ package com.kimslog.service;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostEdit;
 import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,5 +66,15 @@ public class PostService {
                         new PostResponse(post)
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void editPost(Long id, PostEdit postEdit){
+        Post post = postRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        post.change(postEdit.getTitle(), postEdit.getContent());
+
+        //postRepository.save(post);
     }
 }

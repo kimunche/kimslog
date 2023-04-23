@@ -3,8 +3,10 @@ package com.kimslog.service;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
+import com.kimslog.request.PostEdit;
 import com.kimslog.request.PostSearch;
 import com.kimslog.response.PostResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -107,5 +109,28 @@ class PostServiceTest {
         assertEquals("제목 - 19", posts.get(0).getTitle());
 //        assertEquals("제목 - 26", posts.get(4).getTitle());
 
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void editTitle(){
+        //given
+        Post post = Post.builder()
+                .title("원래제목")
+                .content("원래 글 내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정한제목")
+                .build();
+
+       //when
+        postService.editPost(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(()-> new RuntimeException("글이 존재하지 않습니다. id="+post.getId()));
+        Assertions.assertEquals("수정한제목", changedPost.getTitle());
     }
 }

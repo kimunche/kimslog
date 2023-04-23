@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Post {
 
@@ -21,6 +20,11 @@ public class Post {
 
     @Builder
     public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void change(String title, String content){
         this.title = title;
         this.content = content;
     }

@@ -18,6 +18,9 @@ public class PostController {
 
     private final PostService postService;
 
+    /*
+    * 게시글 작성
+    * */
     @PostMapping ("/post")
     public void post(@RequestBody @Valid PostCreate request) {
         //log.info("params={}", params.toString());
