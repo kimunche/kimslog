@@ -24,10 +24,10 @@ public class Post {
         this.content = content;
     }
 
-//    public void change(String title, String content){
-//        this.title = title;
-//        this.content = content;
-//    }
+    public void change(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 
     public PostEditor.PostEditorBuilder toEditor(){
         //build 하지 않은 클래스 자체를 넘김
