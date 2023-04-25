@@ -1,7 +1,7 @@
 package com.kimslog.controller;
 
+import com.kimslog.exception.PostNotfound;
 import com.kimslog.response.ErrorResponse;
-import com.kimslog.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -28,6 +28,19 @@ public class ExceptionController {
         for(FieldError fieldError :  e.getFieldErrors()){
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        return response;
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(PostNotfound.class)
+    public ErrorResponse postNotFound(PostNotfound e){
+        //log.info("e", e);
+        ErrorResponse response = ErrorResponse.builder()
+                .code("404")
+                .message(e.getMessage())
+                .build();
+
         return response;
     }
 }
