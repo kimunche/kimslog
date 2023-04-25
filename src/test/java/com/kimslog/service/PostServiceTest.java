@@ -1,6 +1,7 @@
 package com.kimslog.service;
 
 import com.kimslog.domain.Post;
+import com.kimslog.exception.PostNotfound;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
 import com.kimslog.request.PostEdit;
@@ -177,4 +178,24 @@ class PostServiceTest {
         //then
         Assertions.assertEquals(0,postRepository.count());
     }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글")
+    void getContentExceptTest(){
+        //given requestPost엔티티 저장
+        Post post = Post.builder()
+                .title("글 제목")
+                .content("글 내용")
+                .build();
+        postRepository.save(post);
+
+        //expected 예외발생 검증
+        Assertions.assertThrows(PostNotfound.class, ()->{
+            postService.get(post.getId()+1L);
+        });
+
+        //Assertions.assertEquals("존재하지 않는 글입니다.", e.getMessage());
+    }
+
+
 }

@@ -22,7 +22,7 @@ public class PostController {
     /*
     * 게시글 작성
     * */
-    @PostMapping ("/post")
+    @PostMapping ("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
         //log.info("params={}", params.toString());
         postService.write(request);
@@ -32,7 +32,8 @@ public class PostController {
     * /post/{postId} -> 글 한개만 조회
     * */
 
-    @GetMapping("/post/{postId}")
+    //글 한건 조회
+    @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable Long postId){
         return postService.get(postId);
     }

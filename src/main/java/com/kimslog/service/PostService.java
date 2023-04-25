@@ -2,6 +2,7 @@ package com.kimslog.service;
 
 import com.kimslog.domain.Post;
 import com.kimslog.domain.PostEditor;
+import com.kimslog.exception.PostNotfound;
 import com.kimslog.repository.PostRepository;
 import com.kimslog.request.PostCreate;
 import com.kimslog.request.PostEdit;
@@ -39,8 +40,8 @@ public class PostService {
 //        }
 
         //위 코드 디벨롭
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 글입니다."));
+        Post post = postRepository.findById(id) //id를 통해 글을 찾지 못하면
+                .orElseThrow(PostNotfound::new); //postnotfound 던져줌
 
         return PostResponse.builder()
                 .id(post.getId())
@@ -69,10 +70,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    //글 수정
     @Transactional
     public void editPost(Long id, PostEdit postEdit){
         Post post = postRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotfound::new);
 
         //post.change(postEdit.getTitle(), postEdit.getContent());
 
@@ -87,9 +89,10 @@ public class PostService {
         post.edit(postEditor);
     }
 
+    //글삭제
     public void deletePost(long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지않는 글입니다."));
+                .orElseThrow(PostNotfound::new);
 
         postRepository.delete(post);
     }

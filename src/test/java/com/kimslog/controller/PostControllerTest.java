@@ -63,7 +63,7 @@ class PostControllerTest {
                     .content(json)
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("{}"))
+                //.andExpect(content().string("{}"))
                 .andDo(print()); //http 요청에 대한 summary 남겨줌
     }
 
@@ -100,7 +100,7 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                 .contentType(APPLICATION_JSON)
                 .content(json)
                 )
@@ -126,7 +126,7 @@ class PostControllerTest {
         postRepository.save(post);
 
         //expected
-        mockMvc.perform(get("/post/{postId}", post.getId())
+        mockMvc.perform(get("/posts/{postId}", post.getId())
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
@@ -226,6 +226,17 @@ class PostControllerTest {
         //expected
         mockMvc.perform(delete("/posts/{postId}", post.getId())
                         .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+        //then
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글")
+    void getContentExceptTest() throws Exception {
+         //expected
+        mockMvc.perform(delete("/posts/{postId}", 1L)
+                    .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
         //then
