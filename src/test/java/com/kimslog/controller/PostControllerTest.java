@@ -241,5 +241,22 @@ class PostControllerTest {
                 .andDo(print());
         //then
     }
+
+    @Test
+    @DisplayName("글 수정 - 존재하지 않는 글")
+    void editContentExceptTest() throws Exception {
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정한제목")
+                .content("원래 글 내용")
+                .build();
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                    .contentType(APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(postEdit))
+                 )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
 
