@@ -63,7 +63,7 @@ class PostServiceTest {
     void getContent(){
         //given requestPost엔티티 저장
         Post post = Post.builder()
-                .title("1234567891011")
+                .title("1234567891")
                 .content("content")
                 .build();
         postRepository.save(post);
@@ -74,7 +74,7 @@ class PostServiceTest {
         //then null이면 안됨
         assertNotNull(response);
         assertEquals(1L, postRepository.count());
-        assertEquals("title", response.getTitle());
+        assertEquals("1234567891", response.getTitle());
         assertEquals("content", response.getContent());
     }
 

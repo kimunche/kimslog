@@ -1,5 +1,6 @@
 package com.kimslog.request;
 
+import com.kimslog.exception.InvalidRequest;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 //@AllArgsConstructor //생성자 생성
 public class PostCreate {
 
-    @NotBlank(message = "타이틀을 입력해주세요")
+    @NotBlank(message = "타이틀을 입력해주세요.")
     private String title;
 
     private String content;
@@ -19,5 +20,11 @@ public class PostCreate {
     public PostCreate(String content, String title){
         this.title = title;
         this.content = content;
+    }
+
+    public void validate(){
+        if(title.contains("바보")){
+            throw new InvalidRequest();
+        }
     }
 }

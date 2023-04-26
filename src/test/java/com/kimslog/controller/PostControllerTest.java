@@ -58,7 +58,7 @@ class PostControllerTest {
 
         System.out.println(json); //json 잘생성됐나 확인
         //expected
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                     .contentType(APPLICATION_JSON)
                     .content(json)
                 )
@@ -78,13 +78,13 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                 .contentType(APPLICATION_JSON)
                 .content(json)
         )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
-                .andExpect(jsonPath("$.message").value("잘못된 입력입니다."))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
                 .andDo(print()); //http 요청에 대한 summary 남겨줌
     }
@@ -94,6 +94,7 @@ class PostControllerTest {
     void DBPostTest() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
+                .title("제목")
                 .content("글")
                 .build();
 
