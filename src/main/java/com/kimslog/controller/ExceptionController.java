@@ -1,9 +1,10 @@
 package com.kimslog.controller;
 
-import com.kimslog.exception.PostNotfound;
+import com.kimslog.exception.KimslogException;
 import com.kimslog.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,15 +33,20 @@ public class ExceptionController {
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PostNotfound.class)
-    public ErrorResponse postNotFound(PostNotfound e){
+    //@ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(KimslogException.class) //어플리케이션이 커질수록 예외클래스는 계속 늘어남 => 비즈니스에 맞는 최상위 exception =>kimslogexception
+    public ResponseEntity<ErrorResponse> kimslogException(KimslogException e){
+        int statusCode = e.getStatusCode();
         //log.info("e", e);
-        ErrorResponse response = ErrorResponse.builder()
-                .code("404")
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
                 .message(e.getMessage())
                 .build();
 
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
+
         return response;
     }
+
 }

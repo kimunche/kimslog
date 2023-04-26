@@ -258,5 +258,25 @@ class PostControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
+    void postTitleWordCheck() throws Exception {
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("나는 바보")
+                .content("글")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/posts")
+                    .contentType(APPLICATION_JSON)
+                    .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print()); //http 요청에 대한 summary 남겨줌
+    }
 }
 

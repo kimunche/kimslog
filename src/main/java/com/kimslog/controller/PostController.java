@@ -1,5 +1,6 @@
 package com.kimslog.controller;
 
+import com.kimslog.exception.InvalidRequest;
 import com.kimslog.request.PostCreate;
 import com.kimslog.request.PostEdit;
 import com.kimslog.request.PostSearch;
@@ -25,6 +26,10 @@ public class PostController {
     @PostMapping ("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
         //log.info("params={}", params.toString());
+        if(request.getTitle().contains("바보")){
+            throw new InvalidRequest();
+        }
+
         postService.write(request);
     }
     /*
