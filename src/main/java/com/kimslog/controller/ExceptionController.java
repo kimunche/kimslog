@@ -1,6 +1,5 @@
 package com.kimslog.controller;
 
-import com.kimslog.exception.InvalidRequest;
 import com.kimslog.exception.KimslogException;
 import com.kimslog.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -42,15 +41,17 @@ public class ExceptionController {
         ErrorResponse body = ErrorResponse.builder()
                 .code(String.valueOf(statusCode))
                 .message(e.getMessage())
+                .validation(e.getValidation())
                 .build();
 
         //응답 validation -> title: 제목에 바보를 포함할 수 없습니다.
-        if (e instanceof InvalidRequest){
-            InvalidRequest invalidRequest = (InvalidRequest) e;
-            String fieldName = invalidRequest.getFieldName();
-            String message = invalidRequest.getMessage();
-            body.addValidation(fieldName, message);
-        }
+        //errorResponse 에 생성자 만들어 kimslogException 에서 메세지 처리하게 수정
+//        if (e instanceof InvalidRequest){
+//            InvalidRequest invalidRequest = (InvalidRequest) e;
+//            String fieldName = invalidRequest.getFieldName();
+//            String message = invalidRequest.getMessage();
+//            body.addValidation(fieldName, message);
+//        }
 
         ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
                 .body(body);
