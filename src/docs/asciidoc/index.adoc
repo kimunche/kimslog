@@ -7,9 +7,15 @@
 
 include::{snippets}/index/http-request.adoc[]
 
+=== 요청파라메터
+
+include::{snippets}/index/path-parameters.adoc[]
+
 === 응답
 
 include::{snippets}/index/http-response.adoc[]
+
+include::{snippets}/index/response-fields.adoc[]
 
 === CURL
 

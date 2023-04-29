@@ -11,10 +11,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("ALL")
@@ -49,9 +51,18 @@ class PostControllerDocsTest {
         postRepository.save(post);
 
         //expected
-        this.mockMvc.perform(get("/posts/{postId}",1L)
+        this.mockMvc.perform(get("/posts/{postId}", 1L)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("index"));
+                .andDo(document("index",
+                        RequestDocumentation.pathParameters(
+                                RequestDocumentation.parameterWithName("postId").description("게시글 ID")
+                        ),
+                        PayloadDocumentation.responseFields(
+                                PayloadDocumentation.fieldWithPath("id").description("게시글 ID")
+                                ,PayloadDocumentation.fieldWithPath("title").description("제목")
+                                ,PayloadDocumentation.fieldWithPath("content").description("내용")
+                        )
+                        ));
     }
 }
