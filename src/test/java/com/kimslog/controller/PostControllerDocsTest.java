@@ -1,7 +1,9 @@
 package com.kimslog.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kimslog.domain.Post;
 import com.kimslog.repository.PostRepository;
+import com.kimslog.request.PostCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("ALL")
@@ -31,6 +34,9 @@ class PostControllerDocsTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
 //    @BeforeEach
 //    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -52,7 +58,7 @@ class PostControllerDocsTest {
 
         //expected
         this.mockMvc.perform(get("/posts/{postId}", 1L)
-                .accept(MediaType.APPLICATION_JSON))
+                    .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("index",
                         RequestDocumentation.pathParameters(
@@ -64,5 +70,29 @@ class PostControllerDocsTest {
                                 ,PayloadDocumentation.fieldWithPath("content").description("내용")
                         )
                         ));
+    }
+
+    @Test
+    @DisplayName("글 등록")
+    void test2()throws Exception{
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("제목")
+                .content("글")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        this.mockMvc.perform(post("/posts", 1L)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(json))
+                .andExpect(status().isOk())
+                .andDo(document("index",
+                        PayloadDocumentation.requestFields(
+                                PayloadDocumentation.fieldWithPath("title").description("제목")
+                                ,PayloadDocumentation.fieldWithPath("content").description("내용")
+                        )
+                ));
     }
 }
