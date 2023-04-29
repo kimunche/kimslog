@@ -5,7 +5,7 @@
 
 === 요청
 
-include::{snippets}/index/httpie-request.adoc[]
+include::{snippets}/index/http-request.adoc[]
 
 === 응답
 
