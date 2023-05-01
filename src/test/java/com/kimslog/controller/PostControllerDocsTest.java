@@ -60,7 +60,7 @@ class PostControllerDocsTest {
         this.mockMvc.perform(get("/posts/{postId}", 1L)
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("index",
+                .andDo(document("post-inquiry",
                         RequestDocumentation.pathParameters(
                                 RequestDocumentation.parameterWithName("postId").description("게시글 ID")
                         ),
@@ -88,10 +88,10 @@ class PostControllerDocsTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(json))
                 .andExpect(status().isOk())
-                .andDo(document("index",
+                .andDo(document("post-create",
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("title").description("제목")
-                                ,PayloadDocumentation.fieldWithPath("content").description("내용")
+                                ,PayloadDocumentation.fieldWithPath("content").description("내용").optional()
                         )
                 ));
     }
